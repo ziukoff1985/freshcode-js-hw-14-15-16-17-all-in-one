@@ -105,3 +105,25 @@ const radioContentParagraph2 = document.querySelector(
 );
 radioContentParagraph2.textContent =
     'I plan to submit name ideas, Logo designs or sell names in Domain Marketplace';
+
+const checkboxWrap = document.createElement('div');
+console.log(checkboxWrap);
+checkboxWrap.classList.add('checkbox-wrapper');
+form.append(checkboxWrap);
+
+const checkboxInput = document.createElement('input');
+checkboxInput.setAttribute('type', 'checkbox');
+checkboxInput.setAttribute('name', 'terms');
+checkboxInput.setAttribute('id', 'terms');
+checkboxWrap.append(checkboxInput);
+
+const checkboxInputLabel = document.createElement('label');
+checkboxInputLabel.setAttribute('for', 'terms');
+checkboxInputLabel.textContent =
+    'Allow Squadhelp to send marketing/promotional offers from time to time';
+checkboxWrap.append(checkboxInputLabel);
+
+const submitButton = document.createElement('button');
+submitButton.setAttribute('type', 'submit');
+submitButton.textContent = 'Create Account';
+form.append(submitButton);
