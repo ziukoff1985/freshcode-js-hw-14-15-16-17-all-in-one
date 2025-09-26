@@ -1,5 +1,7 @@
 'use strict';
 
+import { inputConfigData, radioConfigData } from './configData.js';
+
 const container = document.createElement('div');
 container.classList.add('container');
 document.body.prepend(container);
@@ -20,71 +22,37 @@ const inputWrapDiv = document.createElement('div');
 inputWrapDiv.classList.add('inputs-wrapper');
 form.append(inputWrapDiv);
 
-const inputConfigData = [
-    {
-        type: 'text',
-        name: 'first-name',
-        placeholder: 'First name',
-        attributes: { autocomplete: 'on' },
-    },
-    {
-        type: 'text',
-        name: 'last-name',
-        placeholder: 'Last name',
-    },
-    {
-        type: 'text',
-        name: 'display-name',
-        placeholder: 'Display name',
-    },
-    {
-        type: 'email',
-        name: 'email',
-        placeholder: 'Email address',
-        attributes: { autocomplete: 'on' },
-    },
-    {
-        type: 'password',
-        name: 'password',
-        placeholder: 'Password',
-    },
-    {
-        type: 'password',
-        name: 'password-confirmation',
-        placeholder: 'Password confirmation',
-    },
-];
-
-inputConfigData.forEach(({ type, name, placeholder, attributes }) => {
+function createInput({ type, name, placeholder, attributes = {} }) {
     const input = document.createElement('input');
-    input.setAttribute('type', type);
-    input.setAttribute('name', name);
-    input.setAttribute('placeholder', placeholder);
     input.setAttribute('aria-label', placeholder);
+    Object.assign(input, {
+        type: type,
+        name: name,
+        placeholder: placeholder,
+        ...attributes,
+    });
+    return input;
+}
 
-    if (attributes) {
-        for (const key in attributes) {
-            input.setAttribute(key, attributes[key]);
-        }
-    }
-
-    inputWrapDiv.append(input);
+inputConfigData.forEach((data) => {
+    inputWrapDiv.append(createInput(data));
 });
 
-const radioConfigData = [
-    {
-        id: 'buyer',
-        label: 'Join As a Buyer',
-        paragraphText:
-            'I`m looking for a Name, Logo or Tagline for my business, brand or product',
-    },
-    {
-        id: 'seller',
-        label: 'Join As a Creative or Marketplace Seller',
-        paragraphText:
-            'I plan to submit name ideas, Logo designs or sell names in Domain Marketplace',
-    },
-];
+// inputConfigData.forEach(({ type, name, placeholder, attributes }) => {
+//     const input = document.createElement('input');
+//     input.setAttribute('type', type);
+//     input.setAttribute('name', name);
+//     input.setAttribute('placeholder', placeholder);
+//     input.setAttribute('aria-label', placeholder);
+
+//     if (attributes) {
+//         for (const key in attributes) {
+//             input.setAttribute(key, attributes[key]);
+//         }
+//     }
+
+//     inputWrapDiv.append(input);
+// });
 
 radioConfigData.forEach(({ id, label, paragraphText }) => {
     const radioWrapDiv = document.createElement('div');
