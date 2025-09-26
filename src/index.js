@@ -22,37 +22,21 @@ const inputWrapDiv = document.createElement('div');
 inputWrapDiv.classList.add('inputs-wrapper');
 form.append(inputWrapDiv);
 
-function createInput({ type, name, placeholder, attributes = {} }) {
+inputConfigData.forEach(({ type, name, placeholder, attributes }) => {
     const input = document.createElement('input');
+    input.setAttribute('type', type);
+    input.setAttribute('name', name);
+    input.setAttribute('placeholder', placeholder);
     input.setAttribute('aria-label', placeholder);
-    Object.assign(input, {
-        type: type,
-        name: name,
-        placeholder: placeholder,
-        ...attributes,
-    });
-    return input;
-}
 
-inputConfigData.forEach((data) => {
-    inputWrapDiv.append(createInput(data));
+    if (attributes) {
+        for (const key in attributes) {
+            input.setAttribute(key, attributes[key]);
+        }
+    }
+
+    inputWrapDiv.append(input);
 });
-
-// inputConfigData.forEach(({ type, name, placeholder, attributes }) => {
-//     const input = document.createElement('input');
-//     input.setAttribute('type', type);
-//     input.setAttribute('name', name);
-//     input.setAttribute('placeholder', placeholder);
-//     input.setAttribute('aria-label', placeholder);
-
-//     if (attributes) {
-//         for (const key in attributes) {
-//             input.setAttribute(key, attributes[key]);
-//         }
-//     }
-
-//     inputWrapDiv.append(input);
-// });
 
 radioConfigData.forEach(({ id, label, paragraphText }) => {
     const radioWrapDiv = document.createElement('div');
