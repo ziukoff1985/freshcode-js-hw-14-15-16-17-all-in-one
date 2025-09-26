@@ -25,7 +25,7 @@ const inputConfigData = [
         type: 'text',
         name: 'first-name',
         placeholder: 'First name',
-        attributes: { autocomplete: 'off' },
+        attributes: { autocomplete: 'on' },
     },
     {
         type: 'text',
@@ -41,7 +41,7 @@ const inputConfigData = [
         type: 'email',
         name: 'email',
         placeholder: 'Email address',
-        attributes: { autocomplete: 'off' },
+        attributes: { autocomplete: 'on' },
     },
     {
         type: 'password',
@@ -55,16 +55,16 @@ const inputConfigData = [
     },
 ];
 
-inputConfigData.forEach((data) => {
+inputConfigData.forEach(({ type, name, placeholder, attributes }) => {
     const input = document.createElement('input');
-    input.setAttribute('type', data.type);
-    input.setAttribute('name', data.name);
-    input.setAttribute('placeholder', data.placeholder);
-    input.setAttribute('aria-label', data.placeholder);
+    input.setAttribute('type', type);
+    input.setAttribute('name', name);
+    input.setAttribute('placeholder', placeholder);
+    input.setAttribute('aria-label', placeholder);
 
-    if (data.attributes) {
-        for (const key in data.attributes) {
-            input.setAttribute(key, data.attributes[key]);
+    if (attributes) {
+        for (const key in attributes) {
+            input.setAttribute(key, attributes[key]);
         }
     }
 
@@ -86,7 +86,7 @@ const radioConfigData = [
     },
 ];
 
-radioConfigData.forEach((data) => {
+radioConfigData.forEach(({ id, label, paragraphText }) => {
     const radioWrapDiv = document.createElement('div');
     radioWrapDiv.classList.add('radio-wrapper');
     form.append(radioWrapDiv);
@@ -94,7 +94,7 @@ radioConfigData.forEach((data) => {
     const radioInput = document.createElement('input');
     radioInput.setAttribute('type', 'radio');
     radioInput.setAttribute('name', 'join-as');
-    radioInput.setAttribute('id', data.id);
+    radioInput.setAttribute('id', id);
     radioWrapDiv.append(radioInput);
 
     const radioContentDiv = document.createElement('div');
@@ -102,31 +102,31 @@ radioConfigData.forEach((data) => {
     radioWrapDiv.append(radioContentDiv);
 
     const radioContentLabel = document.createElement('label');
-    radioContentLabel.setAttribute('for', data.id);
-    radioContentLabel.textContent = data.label;
+    radioContentLabel.setAttribute('for', id);
+    radioContentLabel.textContent = label;
     radioContentDiv.append(radioContentLabel);
 
     const radioContentParagraph = document.createElement('p');
     radioContentParagraph.classList.add('radio-text');
-    radioContentParagraph.textContent = data.paragraphText;
+    radioContentParagraph.textContent = paragraphText;
     radioContentDiv.append(radioContentParagraph);
 });
 
-const checkboxWrap = document.createElement('div');
-checkboxWrap.classList.add('checkbox-wrapper');
-form.append(checkboxWrap);
+const checkboxWrapDiv = document.createElement('div');
+checkboxWrapDiv.classList.add('checkbox-wrapper');
+form.append(checkboxWrapDiv);
 
 const checkboxInput = document.createElement('input');
 checkboxInput.setAttribute('type', 'checkbox');
 checkboxInput.setAttribute('name', 'terms');
 checkboxInput.setAttribute('id', 'terms');
-checkboxWrap.append(checkboxInput);
+checkboxWrapDiv.append(checkboxInput);
 
 const checkboxInputLabel = document.createElement('label');
 checkboxInputLabel.setAttribute('for', 'terms');
 checkboxInputLabel.textContent =
     'Allow Squadhelp to send marketing/promotional offers from time to time';
-checkboxWrap.append(checkboxInputLabel);
+checkboxWrapDiv.append(checkboxInputLabel);
 
 const submitButton = document.createElement('button');
 submitButton.setAttribute('type', 'submit');
