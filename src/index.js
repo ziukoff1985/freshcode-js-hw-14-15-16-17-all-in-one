@@ -38,6 +38,23 @@ inputConfigData.forEach(({ type, name, placeholder, attributes }) => {
     inputWrapDiv.append(input);
 });
 
+// ! Альтернативний варіант з 'фабричною функцією'
+// function createInput({ type, name, placeholder, attributes = {} }) {
+//     const input = document.createElement('input');
+//     Object.assign(input, {
+//         type: type,
+//         name: name,
+//         placeholder: placeholder,
+//         ariaLabel: placeholder,
+//         ...attributes,
+//     });
+//     inputWrapDiv.append(input);
+// }
+
+// inputConfigData.forEach((data) => {
+//     createInput(data);
+// });
+
 radioConfigData.forEach(({ id, label, paragraphText }) => {
     const radioWrapDiv = document.createElement('div');
     radioWrapDiv.classList.add('radio-wrapper');
