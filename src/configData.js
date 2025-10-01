@@ -1,19 +1,20 @@
 export const inputConfigData = [
     {
         type: 'text',
-        name: 'first-name',
+        name: 'firstName',
         placeholder: 'First name',
         attributes: { autocomplete: 'on' },
     },
     {
         type: 'text',
-        name: 'last-name',
+        name: 'lastName',
         placeholder: 'Last name',
+        attributes: { required: true },
     },
     {
         type: 'text',
-        name: 'display-name',
-        placeholder: 'Display name',
+        name: 'nickName',
+        placeholder: 'Nick name',
     },
     {
         type: 'email',

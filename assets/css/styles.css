@@ -16,11 +16,11 @@ body {
 }
 
 form {
-    margin: 20px auto;
+    margin: 100px auto;
     max-width: 570px;
     width: 100%;
     min-width: 400px;
-    padding: 15px 20px;
+    padding: 30px 20px;
     background-color: rgb(0, 166, 249);
     display: flex;
     gap: 20px;
