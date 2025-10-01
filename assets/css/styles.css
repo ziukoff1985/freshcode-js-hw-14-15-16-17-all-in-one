@@ -71,44 +71,16 @@ form > p {
     color: rgb(169, 169, 169);
 }
 
-.radio-wrapper {
-    border: 1px solid rgb(255, 255, 255);
+.btn-wrapper {
     width: 100%;
     display: flex;
-    gap: 10px;
-    padding: 20px 10px;
+    gap: 20px;
+    margin-top: 20px;
 }
 
-.radio-content {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.radio-content > label {
-    font-weight: bold;
-}
-
-.checkbox-wrapper {
-    width: 100%;
-    display: flex;
-    padding: 5px 15px;
-    gap: 10px;
-    justify-content: start;
-    align-items: center;
-}
-
-.checkbox-wrapper > label,
-.radio-text {
-    font-size: var(--smaller-paragraph);
-    line-height: 1;
-    letter-spacing: 0.6px;
-}
-
-.checkbox-wrapper > input {
-    width: 15px;
-    height: 15px;
-    margin-bottom: 2px;
+button[type='reset'] {
+    background-color: rgb(196, 95, 95);
+    color: rgb(255, 255, 255);
 }
 
 button {
@@ -124,9 +96,7 @@ button {
     transition: all 0.3s ease-in-out;
 }
 
-button:hover,
-button:active,
-button:focus {
+button:hover {
     background-color: rgb(255, 255, 255);
     box-shadow: 0 0 2px 2px rgb(90, 90, 90);
     color: rgb(0, 166, 249);
