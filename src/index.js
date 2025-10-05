@@ -48,9 +48,14 @@ cancelButton.setAttribute('type', 'reset');
 cancelButton.textContent = 'Cancel';
 btnWrapDiv.append(cancelButton);
 
-// DOM - Events
+// DOM - events creation
 class Person {
-    constructor(firstName, lastName, nickName, email) {
+    constructor(
+        firstName = 'Not provided',
+        lastName,
+        nickName = 'Not provided',
+        email = 'Not provided'
+    ) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.nickName = nickName;
@@ -62,24 +67,19 @@ function onSubmitForm(event) {
     event.preventDefault();
     const formElements = form.elements;
 
-    const firstName = formElements.firstName.value.trim();
-    const lastName = formElements.lastName.value.trim();
-    const nickName = formElements.nickName.value.trim();
-    const email = formElements.email.value.trim();
+    const person = new Person();
 
-    if (!lastName) {
+    for (const { name, value, tagName } of formElements) {
+        if (!name || tagName !== 'INPUT' || value.trim() === '') continue;
+        person[name] = value.trim();
+    }
+
+    if (!person.lastName) {
         console.log('Cannot save: Last Name is required and cannot be empty');
         return;
     }
 
-    const person = new Person(
-        firstName || 'Not provided',
-        lastName || 'Not provided',
-        nickName || 'Not provided',
-        email || 'Not provided'
-    );
-
-    localStorage.setItem(lastName, JSON.stringify(person));
+    localStorage.setItem(person.lastName, JSON.stringify(person));
     form.reset();
 }
 
