@@ -70,8 +70,9 @@ function onSubmitForm(event) {
     const person = new Person();
 
     for (const { name, value, tagName } of formElements) {
-        if (!name || tagName !== 'INPUT' || value.trim() === '') continue;
-        person[name] = value.trim();
+        if (name && tagName === 'INPUT' && value.trim()) {
+            person[name] = value.trim();
+        }
     }
 
     if (!person.lastName) {
