@@ -71,6 +71,46 @@ form > p {
     color: rgb(169, 169, 169);
 }
 
+.radio-wrapper {
+    border: 1px solid rgb(255, 255, 255);
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    padding: 20px 10px;
+}
+
+.radio-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.radio-content > label {
+    font-weight: bold;
+}
+
+.checkbox-wrapper {
+    width: 100%;
+    display: flex;
+    padding: 5px 15px;
+    gap: 10px;
+    justify-content: start;
+    align-items: center;
+}
+
+.checkbox-wrapper > label,
+.radio-text {
+    font-size: var(--smaller-paragraph);
+    line-height: 1;
+    letter-spacing: 0.6px;
+}
+
+.checkbox-wrapper > input {
+    width: 15px;
+    height: 15px;
+    margin-bottom: 2px;
+}
+
 .btn-wrapper {
     width: 100%;
     display: flex;

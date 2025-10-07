@@ -1,6 +1,6 @@
 'use strict';
 
-import { inputConfigData } from './configData.js';
+import { inputConfigData, radioConfigData } from './configData.js';
 
 // DOM - elements creation
 const container = document.createElement('div');
@@ -34,6 +34,48 @@ inputConfigData.forEach(({ type, name, placeholder, attributes }) => {
     inputWrapDiv.append(input);
 });
 
+radioConfigData.forEach(({ id, label, paragraphText }) => {
+    const radioWrapDiv = document.createElement('div');
+    radioWrapDiv.classList.add('radio-wrapper');
+    form.append(radioWrapDiv);
+
+    const radioInput = document.createElement('input');
+    radioInput.setAttribute('type', 'radio');
+    radioInput.setAttribute('name', 'join-as');
+    radioInput.setAttribute('id', id);
+    radioWrapDiv.append(radioInput);
+
+    const radioContentDiv = document.createElement('div');
+    radioContentDiv.classList.add('radio-content');
+    radioWrapDiv.append(radioContentDiv);
+
+    const radioContentLabel = document.createElement('label');
+    radioContentLabel.setAttribute('for', id);
+    radioContentLabel.textContent = label;
+    radioContentDiv.append(radioContentLabel);
+
+    const radioContentParagraph = document.createElement('p');
+    radioContentParagraph.classList.add('radio-text');
+    radioContentParagraph.textContent = paragraphText;
+    radioContentDiv.append(radioContentParagraph);
+});
+
+const checkboxWrapDiv = document.createElement('div');
+checkboxWrapDiv.classList.add('checkbox-wrapper');
+form.append(checkboxWrapDiv);
+
+const checkboxInput = document.createElement('input');
+checkboxInput.setAttribute('type', 'checkbox');
+checkboxInput.setAttribute('name', 'terms');
+checkboxInput.setAttribute('id', 'terms');
+checkboxWrapDiv.append(checkboxInput);
+
+const checkboxInputLabel = document.createElement('label');
+checkboxInputLabel.setAttribute('for', 'terms');
+checkboxInputLabel.textContent =
+    'Allow Squadhelp to send marketing/promotional offers from time to time';
+checkboxWrapDiv.append(checkboxInputLabel);
+
 const btnWrapDiv = document.createElement('div');
 btnWrapDiv.classList.add('btn-wrapper');
 form.append(btnWrapDiv);
@@ -61,7 +103,8 @@ class Person {
 function onSubmitForm(event) {
     event.preventDefault();
     const formInputs = [...document.querySelectorAll('input')].filter(
-        ({ name, value }) => name && value.trim()
+        ({ name, value, type }) =>
+            name && value.trim() && type !== 'checkbox' && type !== 'radio'
     );
 
     const person = new Person(...formInputs);
@@ -73,7 +116,10 @@ function onSubmitForm(event) {
 
     const personJson = JSON.stringify(
         person,
-        (key, value) => (key === 'email' ? undefined : value),
+        (key, value) =>
+            key === 'password' || key === 'passwordConfirmation'
+                ? undefined
+                : value,
         2
     );
 
@@ -82,56 +128,3 @@ function onSubmitForm(event) {
 }
 
 form.addEventListener('submit', onSubmitForm);
-
-// class Person {
-//     constructor(
-//         firstName = 'Not provided',
-//         lastName,
-//         nickName = 'Not provided',
-//         email = 'Not provided'
-//     ) {
-//         this.firstName = firstName;
-//         this.lastName = lastName;
-//         this.nickName = nickName;
-//         this.email = email;
-//     }
-// }
-
-// function onSubmitForm(event) {
-//     event.preventDefault();
-//     const formElements = form.elements;
-
-//     const person = new Person();
-
-//     for (const { name, value, tagName } of formElements) {
-//         if (name && tagName === 'INPUT' && value.trim()) {
-//             person[name] = value.trim();
-//         }
-//     }
-
-//     if (!person.lastName) {
-//         console.log('Cannot save: Last Name is required and cannot be empty');
-//         return;
-//     }
-
-//     localStorage.setItem(person.lastName, JSON.stringify(person));
-//     form.reset();
-// }
-
-// form.addEventListener('submit', onSubmitForm);
-
-// function onChangeInputs(event) {
-//     const { name, value } = event.target;
-
-//     console.log('Name:', name);
-
-//     console.log('Value:', value);
-// }
-
-// form.addEventListener('change', onChangeInputs);
-
-// const inputs = form.querySelectorAll('input');
-
-// inputs.forEach((input) => {
-//     input.addEventListener('input', onChangeInputs);
-// });
