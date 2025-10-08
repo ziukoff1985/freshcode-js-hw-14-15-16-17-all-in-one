@@ -1,9 +1,4 @@
-export function createElementWithClassAndAttributes(
-    tag,
-    className,
-    parent,
-    attributes = null
-) {
+export function createNewElement(tag, className, parent, attributes = null) {
     const element = document.createElement(tag);
 
     if (className) {

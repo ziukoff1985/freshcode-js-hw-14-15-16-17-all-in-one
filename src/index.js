@@ -1,4 +1,7 @@
 'use strict';
+import { createFormElements } from './createForm.js';
+
+createFormElements();
 
 // import { inputConfigData, radioConfigData } from './configData.js';
 
