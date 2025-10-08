@@ -1,10 +1,13 @@
 'use strict';
 import { createFormElements } from './createForm.js';
 import { setupEmailValidation } from './validateEmail.js';
+import { setupSubmitForm } from './submitForm.js';
 
 createFormElements();
 
 setupEmailValidation('input[name="email"]');
+
+setupSubmitForm();
 
 // import { inputConfigData, radioConfigData } from './configData.js';
 
