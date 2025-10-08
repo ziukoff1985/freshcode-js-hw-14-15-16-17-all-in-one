@@ -1,29 +1,33 @@
 import { createNewElement } from './helpers.js';
 
-let isValidEmail = false;
+let isDataValid = false;
 
-export const getIsValidEmail = () => isValidEmail;
+export const getIsDataValid = () => isDataValid;
 
-export function setupEmailValidation(emailSelector) {
-    const emailInput = document.querySelector(emailSelector);
+export function setupDataValidation(
+    selector,
+    validationRegex,
+    errorMessageText
+) {
+    const emailInput = document.querySelector(selector);
     if (!emailInput) return;
 
     const inputGroupEmail = emailInput.closest('.input-group');
 
-    const emailRegex = /^\w+\.?-?\w+@[a-z]{3,8}\.[a-z]{2,5}$/i;
+    const emailRegex = validationRegex;
 
     const errorMessage = createNewElement(
         'div',
         'error-message',
         inputGroupEmail
     );
-    errorMessage.textContent = 'INVALID EMAIL FORMAT';
+    errorMessage.textContent = errorMessageText;
 
-    function validateEmail(event) {
+    function validateData(event) {
         const email = event.target.value;
         const isValid = emailRegex.test(email);
 
-        isValidEmail = isValid;
+        isDataValid = isValid;
 
         if (!isValid) {
             errorMessage.classList.add('visible');
@@ -33,5 +37,5 @@ export function setupEmailValidation(emailSelector) {
             emailInput.classList.remove('invalid');
         }
     }
-    emailInput.addEventListener('input', validateEmail);
+    emailInput.addEventListener('input', validateData);
 }

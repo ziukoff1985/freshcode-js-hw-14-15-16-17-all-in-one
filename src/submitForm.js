@@ -1,5 +1,5 @@
 import { form } from './createForm.js';
-import { getIsValidEmail } from './validateEmail.js';
+import { getIsDataValid } from './validateEmail.js';
 
 class Person {
     constructor(...args) {
@@ -13,7 +13,7 @@ export function setupSubmitForm() {
     function onSubmitForm(event) {
         event.preventDefault();
 
-        if (!getIsValidEmail()) return;
+        if (!getIsDataValid()) return;
 
         const formInputs = [...document.querySelectorAll('input')].filter(
             ({ name, value, type }) =>
