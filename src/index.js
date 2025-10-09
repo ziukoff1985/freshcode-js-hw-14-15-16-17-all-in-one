@@ -1,6 +1,6 @@
 'use strict';
 import { createFormElements } from './createForm.js';
-import { setupDataValidation } from './validateEmail.js';
+import { setupDataValidation } from './validateField.js';
 import { setupSubmitForm } from './submitForm.js';
 import {
     EMAIL_SELECTOR,

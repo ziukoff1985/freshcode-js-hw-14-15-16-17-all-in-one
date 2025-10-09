@@ -1,5 +1,5 @@
 import { form } from './createForm.js';
-import { getIsDataValid } from './validateEmail.js';
+import { getIsDataValid } from './validateField.js';
 
 class Person {
     constructor(...args) {
