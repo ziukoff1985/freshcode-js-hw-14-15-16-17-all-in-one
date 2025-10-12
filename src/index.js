@@ -84,7 +84,6 @@ form.append(btnWrapDiv);
 
 const submitButton = document.createElement('button');
 submitButton.setAttribute('type', 'submit');
-submitButton.setAttribute('disabled', true);
 submitButton.textContent = 'Submit';
 btnWrapDiv.append(submitButton);
 
@@ -96,12 +95,12 @@ btnWrapDiv.append(cancelButton);
 // DOM - Email Validation
 const emailInput = document.querySelector('input[name="email"]');
 
-const inputGroup = emailInput.closest('.input-group');
+const emailInputGroup = emailInput.closest('.input-group');
 
 const errorMessage = document.createElement('div');
 errorMessage.classList.add('error-message');
 errorMessage.textContent = 'INVALID EMAIL FORMAT';
-inputGroup.append(errorMessage);
+emailInputGroup.append(errorMessage);
 
 function validateEmail() {
     const email = emailInput.value;
@@ -123,7 +122,7 @@ function validateEmail() {
 
 emailInput.addEventListener('input', validateEmail);
 
-// DOM - Collecting Props and Form Submission
+// DOM - Collecting Props and Form Submit
 class Person {
     constructor(...args) {
         args.forEach(({ name, value }) => {
@@ -142,11 +141,6 @@ function onSubmitForm(event) {
 
     const person = new Person(...formInputs);
 
-    if (!person.lastName) {
-        console.log('Cannot save: Last Name is required and cannot be empty');
-        return;
-    }
-
     const personJson = JSON.stringify(
         person,
         (key, value) =>
@@ -161,3 +155,12 @@ function onSubmitForm(event) {
 }
 
 form.addEventListener('submit', onSubmitForm);
+
+function onCancelForm() {
+    errorMessage.classList.remove('visible');
+    emailInput.classList.remove('invalid');
+    submitButton.removeAttribute('disabled');
+    submitButton.classList.remove('btn-disabled');
+}
+
+cancelButton.addEventListener('click', onCancelForm);
