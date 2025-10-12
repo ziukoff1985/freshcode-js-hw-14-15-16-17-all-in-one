@@ -1,7 +1,6 @@
-'use strict';
-
 import { inputConfigData, radioConfigData } from './configData.js';
 
+// DOM - elements creation
 const container = document.createElement('div');
 container.classList.add('container');
 document.body.prepend(container);
@@ -13,16 +12,15 @@ const h1 = document.createElement('h1');
 h1.textContent = 'CREATE AN ACCOUNT';
 form.append(h1);
 
-const formParagraph = document.createElement('p');
-formParagraph.textContent =
-    'We always keep your name and email address private';
-form.append(formParagraph);
-
 const inputWrapDiv = document.createElement('div');
 inputWrapDiv.classList.add('inputs-wrapper');
 form.append(inputWrapDiv);
 
 inputConfigData.forEach(({ type, name, placeholder, attributes }) => {
+    const inputGroupDiv = document.createElement('div');
+    inputGroupDiv.classList.add('input-group');
+    inputWrapDiv.append(inputGroupDiv);
+
     const input = document.createElement('input');
     input.setAttribute('type', type);
     input.setAttribute('name', name);
@@ -35,7 +33,7 @@ inputConfigData.forEach(({ type, name, placeholder, attributes }) => {
         }
     }
 
-    inputWrapDiv.append(input);
+    inputGroupDiv.append(input);
 });
 
 radioConfigData.forEach(({ id, label, paragraphText }) => {
@@ -80,7 +78,89 @@ checkboxInputLabel.textContent =
     'Allow Squadhelp to send marketing/promotional offers from time to time';
 checkboxWrapDiv.append(checkboxInputLabel);
 
+const btnWrapDiv = document.createElement('div');
+btnWrapDiv.classList.add('btn-wrapper');
+form.append(btnWrapDiv);
+
 const submitButton = document.createElement('button');
 submitButton.setAttribute('type', 'submit');
-submitButton.textContent = 'Create Account';
-form.append(submitButton);
+submitButton.textContent = 'Submit';
+btnWrapDiv.append(submitButton);
+
+const cancelButton = document.createElement('button');
+cancelButton.setAttribute('type', 'reset');
+cancelButton.textContent = 'Cancel';
+btnWrapDiv.append(cancelButton);
+
+// DOM - Email Validation
+const emailInput = document.querySelector('input[name="email"]');
+
+const emailInputGroup = emailInput.closest('.input-group');
+
+const errorMessage = document.createElement('div');
+errorMessage.classList.add('error-message');
+errorMessage.textContent = 'INVALID EMAIL FORMAT';
+emailInputGroup.append(errorMessage);
+
+function validateEmail() {
+    const email = emailInput.value;
+    const regexp = /^\w+[\.-]?\w+@[a-z]{3,8}\.[a-z]{2,5}$/i;
+    const isEmailValid = regexp.test(email);
+
+    if (!isEmailValid) {
+        errorMessage.classList.add('visible');
+        emailInput.classList.add('invalid');
+        submitButton.setAttribute('disabled', true);
+        submitButton.classList.add('btn-disabled');
+    } else {
+        errorMessage.classList.remove('visible');
+        emailInput.classList.remove('invalid');
+        submitButton.removeAttribute('disabled');
+        submitButton.classList.remove('btn-disabled');
+    }
+}
+
+emailInput.addEventListener('input', validateEmail);
+
+// DOM - Collecting Props and Form Submit
+class Person {
+    constructor(...args) {
+        args.forEach(({ name, value }) => {
+            this[name] = value.trim();
+        });
+    }
+}
+
+function onSubmitForm(event) {
+    event.preventDefault();
+
+    const formInputs = [...document.querySelectorAll('input')].filter(
+        ({ name, value, type }) =>
+            name && value.trim() && type !== 'checkbox' && type !== 'radio'
+    );
+
+    const person = new Person(...formInputs);
+
+    const personJson = JSON.stringify(
+        person,
+        (key, value) =>
+            key === 'password' || key === 'passwordConfirmation'
+                ? undefined
+                : value,
+        2
+    );
+
+    localStorage.setItem(person.lastName, personJson);
+    form.reset();
+}
+
+form.addEventListener('submit', onSubmitForm);
+
+function onCancelForm() {
+    errorMessage.classList.remove('visible');
+    emailInput.classList.remove('invalid');
+    submitButton.removeAttribute('disabled');
+    submitButton.classList.remove('btn-disabled');
+}
+
+cancelButton.addEventListener('click', onCancelForm);
