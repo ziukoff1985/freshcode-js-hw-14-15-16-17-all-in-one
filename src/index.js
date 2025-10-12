@@ -1,15 +1,163 @@
-'use strict';
-import { createFormElements } from './createForm.js';
-import { setupDataValidation } from './validateField.js';
-import { setupSubmitForm } from './submitForm.js';
-import {
-    EMAIL_SELECTOR,
-    EMAIL_REGEX,
-    EMAIL_ERROR_MESSAGE,
-} from './validationConfig.js';
+import { inputConfigData, radioConfigData } from './configData.js';
 
-createFormElements();
+// DOM - elements creation
+const container = document.createElement('div');
+container.classList.add('container');
+document.body.prepend(container);
 
-setupDataValidation(EMAIL_SELECTOR, EMAIL_REGEX, EMAIL_ERROR_MESSAGE);
+const form = document.createElement('form');
+container.append(form);
 
-setupSubmitForm();
+const h1 = document.createElement('h1');
+h1.textContent = 'CREATE AN ACCOUNT';
+form.append(h1);
+
+const inputWrapDiv = document.createElement('div');
+inputWrapDiv.classList.add('inputs-wrapper');
+form.append(inputWrapDiv);
+
+inputConfigData.forEach(({ type, name, placeholder, attributes }) => {
+    const inputGroupDiv = document.createElement('div');
+    inputGroupDiv.classList.add('input-group');
+    inputWrapDiv.append(inputGroupDiv);
+
+    const input = document.createElement('input');
+    input.setAttribute('type', type);
+    input.setAttribute('name', name);
+    input.setAttribute('placeholder', placeholder);
+    input.setAttribute('aria-label', placeholder);
+
+    if (attributes) {
+        for (const key in attributes) {
+            input.setAttribute(key, attributes[key]);
+        }
+    }
+
+    inputGroupDiv.append(input);
+});
+
+radioConfigData.forEach(({ id, label, paragraphText }) => {
+    const radioWrapDiv = document.createElement('div');
+    radioWrapDiv.classList.add('radio-wrapper');
+    form.append(radioWrapDiv);
+
+    const radioInput = document.createElement('input');
+    radioInput.setAttribute('type', 'radio');
+    radioInput.setAttribute('name', 'join-as');
+    radioInput.setAttribute('id', id);
+    radioWrapDiv.append(radioInput);
+
+    const radioContentDiv = document.createElement('div');
+    radioContentDiv.classList.add('radio-content');
+    radioWrapDiv.append(radioContentDiv);
+
+    const radioContentLabel = document.createElement('label');
+    radioContentLabel.setAttribute('for', id);
+    radioContentLabel.textContent = label;
+    radioContentDiv.append(radioContentLabel);
+
+    const radioContentParagraph = document.createElement('p');
+    radioContentParagraph.classList.add('radio-text');
+    radioContentParagraph.textContent = paragraphText;
+    radioContentDiv.append(radioContentParagraph);
+});
+
+const checkboxWrapDiv = document.createElement('div');
+checkboxWrapDiv.classList.add('checkbox-wrapper');
+form.append(checkboxWrapDiv);
+
+const checkboxInput = document.createElement('input');
+checkboxInput.setAttribute('type', 'checkbox');
+checkboxInput.setAttribute('name', 'terms');
+checkboxInput.setAttribute('id', 'terms');
+checkboxWrapDiv.append(checkboxInput);
+
+const checkboxInputLabel = document.createElement('label');
+checkboxInputLabel.setAttribute('for', 'terms');
+checkboxInputLabel.textContent =
+    'Allow Squadhelp to send marketing/promotional offers from time to time';
+checkboxWrapDiv.append(checkboxInputLabel);
+
+const btnWrapDiv = document.createElement('div');
+btnWrapDiv.classList.add('btn-wrapper');
+form.append(btnWrapDiv);
+
+const submitButton = document.createElement('button');
+submitButton.setAttribute('type', 'submit');
+submitButton.setAttribute('disabled', true);
+submitButton.textContent = 'Submit';
+btnWrapDiv.append(submitButton);
+
+const cancelButton = document.createElement('button');
+cancelButton.setAttribute('type', 'reset');
+cancelButton.textContent = 'Cancel';
+btnWrapDiv.append(cancelButton);
+
+// DOM - Email Validation
+const emailInput = document.querySelector('input[name="email"]');
+
+const inputGroup = emailInput.closest('.input-group');
+
+const errorMessage = document.createElement('div');
+errorMessage.classList.add('error-message');
+errorMessage.textContent = 'INVALID EMAIL FORMAT';
+inputGroup.append(errorMessage);
+
+function validateEmail() {
+    const email = emailInput.value;
+    const regexp = /^\w+[\.-]?\w+@[a-z]{3,8}\.[a-z]{2,5}$/i;
+    const isEmailValid = regexp.test(email);
+
+    if (!isEmailValid) {
+        errorMessage.classList.add('visible');
+        emailInput.classList.add('invalid');
+        submitButton.setAttribute('disabled', true);
+        submitButton.classList.add('btn-disabled');
+    } else {
+        errorMessage.classList.remove('visible');
+        emailInput.classList.remove('invalid');
+        submitButton.removeAttribute('disabled');
+        submitButton.classList.remove('btn-disabled');
+    }
+}
+
+emailInput.addEventListener('input', validateEmail);
+
+// DOM - Collecting Props and Form Submission
+class Person {
+    constructor(...args) {
+        args.forEach(({ name, value }) => {
+            this[name] = value.trim();
+        });
+    }
+}
+
+function onSubmitForm(event) {
+    event.preventDefault();
+
+    const formInputs = [...document.querySelectorAll('input')].filter(
+        ({ name, value, type }) =>
+            name && value.trim() && type !== 'checkbox' && type !== 'radio'
+    );
+
+    const person = new Person(...formInputs);
+
+    if (!person.lastName) {
+        console.log('Cannot save: Last Name is required and cannot be empty');
+        return;
+    }
+
+    const personJson = JSON.stringify(
+        person,
+        (key, value) =>
+            key === 'password' || key === 'passwordConfirmation'
+                ? undefined
+                : value,
+        2
+    );
+
+    localStorage.setItem(person.lastName, personJson);
+    form.reset();
+}
+
+form.addEventListener('submit', onSubmitForm);

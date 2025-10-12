@@ -65,9 +65,9 @@ form > p {
     transition: all 0.3s ease-in-out;
 }
 
-.inputs-wrapper > input:hover,
-.inputs-wrapper > input:active,
-.inputs-wrapper > input:focus {
+.input-group > input:hover,
+.input-group > input:active,
+.input-group > input:focus {
     box-shadow: inset 0 0 3px 3px rgb(0, 208, 163);
 }
 
@@ -173,4 +173,9 @@ button:hover {
     background-color: rgb(255, 255, 255);
     box-shadow: 0 0 2px 2px rgb(90, 90, 90);
     color: rgb(0, 166, 249);
+}
+
+.btn-disabled {
+    pointer-events: none;
+    background-color: #48b6d5;
 }

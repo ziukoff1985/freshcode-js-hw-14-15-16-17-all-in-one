@@ -3,13 +3,13 @@ const inputConfigData = [
         type: 'text',
         name: 'firstName',
         placeholder: 'First name',
-        autocomplete: 'on',
+        attributes: { autocomplete: 'on' },
     },
     {
         type: 'text',
         name: 'lastName',
         placeholder: 'Last name',
-        required: true,
+        attributes: { required: true },
     },
     {
         type: 'text',
@@ -20,7 +20,7 @@ const inputConfigData = [
         type: 'email',
         name: 'email',
         placeholder: 'Email address',
-        autocomplete: 'on',
+        attributes: { autocomplete: 'on' },
     },
     {
         type: 'password',
