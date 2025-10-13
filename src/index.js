@@ -140,7 +140,7 @@ function validatePassword() {
         passwordConfirmInput.disabled = false;
     }
 
-    // Call the function if user entered password, entered confirmation, and then changes entered password
+    // Call the function if user entered password, entered confirmation, and then changed entered password
     if (isPasswordValid && passwordConfirmInput.value) {
         validatePasswordConfirm();
     }
@@ -161,17 +161,6 @@ function validatePasswordConfirm() {
     checkFormValidity();
 }
 passwordConfirmInput.addEventListener('input', validatePasswordConfirm);
-
-// Check if password and password confirmation are valid - enable submit button
-function checkFormValidity() {
-    if (isPasswordValid && isPasswordConfirmValid) {
-        submitButton.disabled = false;
-        submitButton.classList.remove('btn-disabled');
-    } else {
-        submitButton.disabled = true;
-        submitButton.classList.add('btn-disabled');
-    }
-}
 
 // DOM - Collecting Props and Form Submit
 class Person {
@@ -206,6 +195,17 @@ function onSubmitForm(event) {
 }
 
 form.addEventListener('submit', onSubmitForm);
+
+// Check if password and password confirmation are valid - enable submit button
+function checkFormValidity() {
+    if (isPasswordValid && isPasswordConfirmValid) {
+        submitButton.disabled = false;
+        submitButton.classList.remove('btn-disabled');
+    } else {
+        submitButton.disabled = true;
+        submitButton.classList.add('btn-disabled');
+    }
+}
 
 function onCancelForm() {
     errorMessagePassword.classList.remove('visible');
