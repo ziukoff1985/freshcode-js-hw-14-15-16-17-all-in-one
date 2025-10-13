@@ -53,6 +53,7 @@ form > p {
 
 .input-group {
     width: calc((100% - 20px) / 2);
+    text-align: center;
 }
 
 .input-group > input {
@@ -78,7 +79,7 @@ form > p {
 
 .error-message {
     text-align: center;
-    line-height: 1;
+    line-height: 1.2;
     color: rgb(173, 45, 45);
     font-size: var(--bigger-paragraph);
     font-weight: bold;
@@ -91,7 +92,7 @@ form > p {
 }
 
 .visible {
-    height: 25px;
+    height: 45px;
     padding: 5px;
     opacity: 1;
     outline: 3px solid rgb(187, 74, 74);

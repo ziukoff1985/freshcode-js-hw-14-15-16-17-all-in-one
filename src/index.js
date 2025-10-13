@@ -98,48 +98,24 @@ cancelButton.setAttribute('type', 'reset');
 cancelButton.textContent = 'Cancel';
 btnWrapDiv.append(cancelButton);
 
-// DOM - Email Validation
-const emailInput = document.querySelector('input[name="email"]');
-
-const emailInputGroup = emailInput.closest('.input-group');
-
-const errorMessage = document.createElement('div');
-errorMessage.classList.add('error-message');
-errorMessage.textContent = 'INVALID EMAIL FORMAT';
-emailInputGroup.append(errorMessage);
-
-let isEmailValid = false;
-
-function validateEmail() {
-    const email = emailInput.value;
-    const regexp = /^\w+[\.-]?\w+@[a-z]{3,8}\.[a-z]{2,5}$/i;
-    isEmailValid = regexp.test(email);
-
-    if (!isEmailValid) {
-        errorMessage.classList.add('visible');
-        emailInput.classList.add('invalid');
-    } else {
-        errorMessage.classList.remove('visible');
-        emailInput.classList.remove('invalid');
-    }
-    checkFormValidity();
-}
-emailInput.addEventListener('input', validateEmail);
-
-// DOM - Password Validation and Confirmation
+// Password Validation and Confirmation
 const passwordInputs = document.querySelectorAll('input[type="password"]');
 const [passwordInput, passwordConfirmInput] = passwordInputs;
 
 passwordInputs.forEach((input) => {
+    input.addEventListener('focus', () => (input.type = 'text'));
+    input.addEventListener('blur', () => (input.type = 'password'));
     const inputGroup = input.closest('.input-group');
     const errorMessage = document.createElement('div');
     errorMessage.classList.add('error-message');
-    if (input.name === 'password') {
-        errorMessage.textContent = 'Min 8 chars: a-z, A-Z, 0-9, _';
-    } else {
-        errorMessage.textContent = 'Passwords don`t match';
-    }
     inputGroup.append(errorMessage);
+    if (input.name === 'password') {
+        errorMessage.textContent =
+            'Minimum 8 characters needed. Allowed chars: a-z, A-Z, 0-9, _';
+    } else {
+        errorMessage.textContent =
+            'Please ensure both passwords are identical.';
+    }
 });
 const errorMessagePassword =
     passwordInput.parentElement.querySelector('.error-message');
@@ -147,12 +123,11 @@ const errorMessagePasswordConfirm =
     passwordConfirmInput.parentElement.querySelector('.error-message');
 
 let isPasswordValid = false;
+let isPasswordConfirmValid = false;
 
 function passwordValidation() {
-    const passwordRegexp = /\w{8,}/i;
+    const passwordRegexp = /^[\w!@#$%^&]{8,}$/i;
     isPasswordValid = passwordRegexp.test(passwordInput.value);
-
-    passwordInput.type = isPasswordValid ? 'password' : 'text';
 
     if (!isPasswordValid) {
         errorMessagePassword.classList.add('visible');
@@ -161,17 +136,18 @@ function passwordValidation() {
         errorMessagePassword.classList.remove('visible');
         passwordInput.classList.remove('invalid');
     }
+
+    // Check if user entered confirm password first, than starts entering password
     if (isPasswordValid && passwordConfirmInput.value) {
         passwordConfirmValidation();
     }
+
     checkFormValidity();
 }
 passwordInput.addEventListener('input', passwordValidation);
 
-let isPasswordConfirmValid = false;
 function passwordConfirmValidation() {
     isPasswordConfirmValid = passwordInput.value === passwordConfirmInput.value;
-    passwordConfirmInput.type = isPasswordConfirmValid ? 'password' : 'text';
 
     if (!isPasswordConfirmValid) {
         errorMessagePasswordConfirm.classList.add('visible');
@@ -180,16 +156,20 @@ function passwordConfirmValidation() {
         errorMessagePasswordConfirm.classList.remove('visible');
         passwordConfirmInput.classList.remove('invalid');
     }
+    // Check if user entered confirm password, delete it and than starts entering password (for submit button logic)
+    if (!passwordConfirmInput.value) {
+        isPasswordConfirmValid = false;
+    }
     checkFormValidity();
 }
 passwordConfirmInput.addEventListener('input', passwordConfirmValidation);
 
 function checkFormValidity() {
-    if (isEmailValid && isPasswordValid && isPasswordConfirmValid) {
-        submitButton.removeAttribute('disabled');
+    if (isPasswordValid && isPasswordConfirmValid) {
+        submitButton.disabled = false;
         submitButton.classList.remove('btn-disabled');
     } else {
-        submitButton.setAttribute('disabled', true);
+        submitButton.disabled = true;
         submitButton.classList.add('btn-disabled');
     }
 }
@@ -229,14 +209,14 @@ function onSubmitForm(event) {
 form.addEventListener('submit', onSubmitForm);
 
 function onCancelForm() {
-    errorMessage.classList.remove('visible');
-    emailInput.classList.remove('invalid');
     errorMessagePassword.classList.remove('visible');
     passwordInput.classList.remove('invalid');
     errorMessagePasswordConfirm.classList.remove('visible');
     passwordConfirmInput.classList.remove('invalid');
-    submitButton.removeAttribute('disabled');
-    submitButton.classList.remove('btn-disabled');
+    submitButton.setAttribute('disabled', true);
+    submitButton.classList.add('btn-disabled');
+    isPasswordValid = false;
+    isPasswordConfirmValid = false;
 }
 
 cancelButton.addEventListener('click', onCancelForm);
