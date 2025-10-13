@@ -123,8 +123,64 @@ function validateEmail() {
         submitButton.classList.remove('btn-disabled');
     }
 }
-
 emailInput.addEventListener('input', validateEmail);
+
+// DOM - Password Validation and Confirmation
+const passwordInputs = document.querySelectorAll('input[type="password"]');
+const [passwordInput, passwordConfirmInput] = passwordInputs;
+
+passwordInputs.forEach((input) => {
+    const inputGroup = input.closest('.input-group');
+    const errorMessage = document.createElement('div');
+    errorMessage.classList.add('error-message');
+    if (input.name === 'password') {
+        errorMessage.textContent = 'Min 8 chars: a-z, A-Z, 0-9, _';
+    } else {
+        errorMessage.textContent = 'Passwords don`t match';
+    }
+    inputGroup.append(errorMessage);
+});
+const errorMessagePassword =
+    passwordInput.parentElement.querySelector('.error-message');
+const errorMessagePasswordConfirm =
+    passwordConfirmInput.parentElement.querySelector('.error-message');
+console.log(errorMessagePassword, errorMessagePasswordConfirm);
+
+function passwordValidation() {
+    const passwordRegexp = /\w{8,}/i;
+    const isPasswordValid = passwordRegexp.test(passwordInput.value);
+    toggleErrorMessageVisibility(
+        isPasswordValid,
+        errorMessagePassword,
+        passwordInput
+    );
+}
+passwordInput.addEventListener('input', passwordValidation);
+
+function passwordConfirmValidation() {
+    const isPasswordConfirmValid =
+        passwordInput.value === passwordConfirmInput.value;
+    toggleErrorMessageVisibility(
+        isPasswordConfirmValid,
+        errorMessagePasswordConfirm,
+        passwordConfirmInput
+    );
+}
+passwordConfirmInput.addEventListener('input', passwordConfirmValidation);
+
+function toggleErrorMessageVisibility(isDataValid, errorMessage, input) {
+    if (!isDataValid) {
+        errorMessage.classList.add('visible');
+        input.classList.add('invalid');
+        submitButton.setAttribute('disabled', true);
+        submitButton.classList.add('btn-disabled');
+    } else {
+        errorMessage.classList.remove('visible');
+        input.classList.remove('invalid');
+        submitButton.removeAttribute('disabled');
+        submitButton.classList.remove('btn-disabled');
+    }
+}
 
 // DOM - Collecting Props and Form Submit
 class Person {
