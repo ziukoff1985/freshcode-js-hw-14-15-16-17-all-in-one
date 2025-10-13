@@ -146,22 +146,29 @@ const errorMessagePassword =
     passwordInput.parentElement.querySelector('.error-message');
 const errorMessagePasswordConfirm =
     passwordConfirmInput.parentElement.querySelector('.error-message');
-console.log(errorMessagePassword, errorMessagePasswordConfirm);
 
 function passwordValidation() {
     const passwordRegexp = /\w{8,}/i;
     const isPasswordValid = passwordRegexp.test(passwordInput.value);
+
+    passwordInput.type = isPasswordValid ? 'password' : 'text';
+
     toggleErrMessAndSubmitBtnVisibility(
         isPasswordValid,
         errorMessagePassword,
         passwordInput
     );
+    if (isPasswordValid && passwordConfirmInput.value) {
+        passwordConfirmValidation();
+    }
 }
 passwordInput.addEventListener('input', passwordValidation);
 
 function passwordConfirmValidation() {
     const isPasswordConfirmValid =
         passwordInput.value === passwordConfirmInput.value;
+    passwordConfirmInput.type = isPasswordConfirmValid ? 'password' : 'text';
+
     toggleErrMessAndSubmitBtnVisibility(
         isPasswordConfirmValid,
         errorMessagePasswordConfirm,
@@ -170,6 +177,7 @@ function passwordConfirmValidation() {
 }
 passwordConfirmInput.addEventListener('input', passwordConfirmValidation);
 
+// Function for toggle visibility of error message and submit button
 function toggleErrMessAndSubmitBtnVisibility(isDataValid, errorMessage, input) {
     if (!isDataValid) {
         errorMessage.classList.add('visible');
