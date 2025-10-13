@@ -12,6 +12,10 @@ const h1 = document.createElement('h1');
 h1.textContent = 'CREATE AN ACCOUNT';
 form.append(h1);
 
+const p = document.createElement('p');
+p.textContent = 'We always keep your name and email address private';
+form.append(p);
+
 const inputWrapDiv = document.createElement('div');
 inputWrapDiv.classList.add('inputs-wrapper');
 form.append(inputWrapDiv);
