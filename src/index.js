@@ -102,6 +102,9 @@ btnWrapDiv.append(cancelButton);
 const passwordInputs = document.querySelectorAll('input[type="password"]');
 const [passwordInput, passwordConfirmInput] = passwordInputs;
 
+let errorMessagePassword;
+let errorMessagePasswordConfirm;
+
 passwordInputs.forEach((input) => {
     input.addEventListener('focus', () => (input.type = 'text'));
     input.addEventListener('blur', () => (input.type = 'password'));
@@ -110,17 +113,16 @@ passwordInputs.forEach((input) => {
     errorMessage.classList.add('error-message');
     inputGroup.append(errorMessage);
     if (input.name === 'password') {
+        errorMessagePassword = errorMessage;
         errorMessage.textContent =
-            'Minimum 8 characters needed. Allowed chars: a-z, A-Z, 0-9, _';
+            'Min 8 characters needed. Allow: a-z, A-Z, 0-9, _, !, @, #, $, %, ^, &';
     } else {
+        errorMessagePasswordConfirm = errorMessage;
         errorMessage.textContent =
             'Please ensure both passwords are identical.';
+        input.disabled = true;
     }
 });
-const errorMessagePassword =
-    passwordInput.parentElement.querySelector('.error-message');
-const errorMessagePasswordConfirm =
-    passwordConfirmInput.parentElement.querySelector('.error-message');
 
 let isPasswordValid = false;
 let isPasswordConfirmValid = false;
@@ -135,13 +137,13 @@ function validatePassword() {
     } else {
         errorMessagePassword.classList.remove('visible');
         passwordInput.classList.remove('invalid');
+        passwordConfirmInput.disabled = false;
     }
 
-    // Checking if user entered confirm password first, then started entering the password
+    // Call the function if user entered password, entered confirmation, and then changes entered password
     if (isPasswordValid && passwordConfirmInput.value) {
         validatePasswordConfirm();
     }
-
     checkFormValidity();
 }
 passwordInput.addEventListener('input', validatePassword);
@@ -156,14 +158,11 @@ function validatePasswordConfirm() {
         errorMessagePasswordConfirm.classList.remove('visible');
         passwordConfirmInput.classList.remove('invalid');
     }
-    // Check if user first entered confirm password, deleted it, and started entering password (for submit button logic)
-    if (!passwordConfirmInput.value) {
-        isPasswordConfirmValid = false;
-    }
     checkFormValidity();
 }
 passwordConfirmInput.addEventListener('input', validatePasswordConfirm);
 
+// Check if password and password confirmation are valid - enable submit button
 function checkFormValidity() {
     if (isPasswordValid && isPasswordConfirmValid) {
         submitButton.disabled = false;
@@ -213,7 +212,8 @@ function onCancelForm() {
     passwordInput.classList.remove('invalid');
     errorMessagePasswordConfirm.classList.remove('visible');
     passwordConfirmInput.classList.remove('invalid');
-    submitButton.setAttribute('disabled', true);
+    passwordConfirmInput.disabled = true;
+    submitButton.disabled = true;
     submitButton.classList.add('btn-disabled');
     isPasswordValid = false;
     isPasswordConfirmValid = false;
