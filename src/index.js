@@ -108,22 +108,21 @@ errorMessage.classList.add('error-message');
 errorMessage.textContent = 'INVALID EMAIL FORMAT';
 emailInputGroup.append(errorMessage);
 
+let isEmailValid = false;
+
 function validateEmail() {
     const email = emailInput.value;
     const regexp = /^\w+[\.-]?\w+@[a-z]{3,8}\.[a-z]{2,5}$/i;
-    const isEmailValid = regexp.test(email);
+    isEmailValid = regexp.test(email);
 
     if (!isEmailValid) {
         errorMessage.classList.add('visible');
         emailInput.classList.add('invalid');
-        submitButton.setAttribute('disabled', true);
-        submitButton.classList.add('btn-disabled');
     } else {
         errorMessage.classList.remove('visible');
         emailInput.classList.remove('invalid');
-        submitButton.removeAttribute('disabled');
-        submitButton.classList.remove('btn-disabled');
     }
+    checkFormValidity();
 }
 emailInput.addEventListener('input', validateEmail);
 
@@ -147,48 +146,51 @@ const errorMessagePassword =
 const errorMessagePasswordConfirm =
     passwordConfirmInput.parentElement.querySelector('.error-message');
 
+let isPasswordValid = false;
+
 function passwordValidation() {
     const passwordRegexp = /\w{8,}/i;
-    const isPasswordValid = passwordRegexp.test(passwordInput.value);
+    isPasswordValid = passwordRegexp.test(passwordInput.value);
 
     passwordInput.type = isPasswordValid ? 'password' : 'text';
 
-    toggleErrMessAndSubmitBtnVisibility(
-        isPasswordValid,
-        errorMessagePassword,
-        passwordInput
-    );
+    if (!isPasswordValid) {
+        errorMessagePassword.classList.add('visible');
+        passwordInput.classList.add('invalid');
+    } else {
+        errorMessagePassword.classList.remove('visible');
+        passwordInput.classList.remove('invalid');
+    }
     if (isPasswordValid && passwordConfirmInput.value) {
         passwordConfirmValidation();
     }
+    checkFormValidity();
 }
 passwordInput.addEventListener('input', passwordValidation);
 
+let isPasswordConfirmValid = false;
 function passwordConfirmValidation() {
-    const isPasswordConfirmValid =
-        passwordInput.value === passwordConfirmInput.value;
+    isPasswordConfirmValid = passwordInput.value === passwordConfirmInput.value;
     passwordConfirmInput.type = isPasswordConfirmValid ? 'password' : 'text';
 
-    toggleErrMessAndSubmitBtnVisibility(
-        isPasswordConfirmValid,
-        errorMessagePasswordConfirm,
-        passwordConfirmInput
-    );
+    if (!isPasswordConfirmValid) {
+        errorMessagePasswordConfirm.classList.add('visible');
+        passwordConfirmInput.classList.add('invalid');
+    } else {
+        errorMessagePasswordConfirm.classList.remove('visible');
+        passwordConfirmInput.classList.remove('invalid');
+    }
+    checkFormValidity();
 }
 passwordConfirmInput.addEventListener('input', passwordConfirmValidation);
 
-// Function for toggle visibility of error message and submit button
-function toggleErrMessAndSubmitBtnVisibility(isDataValid, errorMessage, input) {
-    if (!isDataValid) {
-        errorMessage.classList.add('visible');
-        input.classList.add('invalid');
-        submitButton.setAttribute('disabled', true);
-        submitButton.classList.add('btn-disabled');
-    } else {
-        errorMessage.classList.remove('visible');
-        input.classList.remove('invalid');
+function checkFormValidity() {
+    if (isEmailValid && isPasswordValid && isPasswordConfirmValid) {
         submitButton.removeAttribute('disabled');
         submitButton.classList.remove('btn-disabled');
+    } else {
+        submitButton.setAttribute('disabled', true);
+        submitButton.classList.add('btn-disabled');
     }
 }
 
