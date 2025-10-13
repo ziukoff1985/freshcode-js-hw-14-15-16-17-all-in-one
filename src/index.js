@@ -125,7 +125,7 @@ const errorMessagePasswordConfirm =
 let isPasswordValid = false;
 let isPasswordConfirmValid = false;
 
-function passwordValidation() {
+function validatePassword() {
     const passwordRegexp = /^[\w!@#$%^&]{8,}$/i;
     isPasswordValid = passwordRegexp.test(passwordInput.value);
 
@@ -137,16 +137,16 @@ function passwordValidation() {
         passwordInput.classList.remove('invalid');
     }
 
-    // Check if user entered confirm password first, than starts entering password
+    // Checking if user entered confirm password first, then started entering the password
     if (isPasswordValid && passwordConfirmInput.value) {
-        passwordConfirmValidation();
+        validatePasswordConfirm();
     }
 
     checkFormValidity();
 }
-passwordInput.addEventListener('input', passwordValidation);
+passwordInput.addEventListener('input', validatePassword);
 
-function passwordConfirmValidation() {
+function validatePasswordConfirm() {
     isPasswordConfirmValid = passwordInput.value === passwordConfirmInput.value;
 
     if (!isPasswordConfirmValid) {
@@ -156,13 +156,13 @@ function passwordConfirmValidation() {
         errorMessagePasswordConfirm.classList.remove('visible');
         passwordConfirmInput.classList.remove('invalid');
     }
-    // Check if user entered confirm password, delete it and than starts entering password (for submit button logic)
+    // Check if user first entered confirm password, deleted it, and started entering password (for submit button logic)
     if (!passwordConfirmInput.value) {
         isPasswordConfirmValid = false;
     }
     checkFormValidity();
 }
-passwordConfirmInput.addEventListener('input', passwordConfirmValidation);
+passwordConfirmInput.addEventListener('input', validatePasswordConfirm);
 
 function checkFormValidity() {
     if (isPasswordValid && isPasswordConfirmValid) {
