@@ -88,6 +88,8 @@ form.append(btnWrapDiv);
 
 const submitButton = document.createElement('button');
 submitButton.setAttribute('type', 'submit');
+submitButton.setAttribute('disabled', true);
+submitButton.classList.add('btn-disabled');
 submitButton.textContent = 'Submit';
 btnWrapDiv.append(submitButton);
 
@@ -149,7 +151,7 @@ console.log(errorMessagePassword, errorMessagePasswordConfirm);
 function passwordValidation() {
     const passwordRegexp = /\w{8,}/i;
     const isPasswordValid = passwordRegexp.test(passwordInput.value);
-    toggleErrorMessageVisibility(
+    toggleErrMessAndSubmitBtnVisibility(
         isPasswordValid,
         errorMessagePassword,
         passwordInput
@@ -160,7 +162,7 @@ passwordInput.addEventListener('input', passwordValidation);
 function passwordConfirmValidation() {
     const isPasswordConfirmValid =
         passwordInput.value === passwordConfirmInput.value;
-    toggleErrorMessageVisibility(
+    toggleErrMessAndSubmitBtnVisibility(
         isPasswordConfirmValid,
         errorMessagePasswordConfirm,
         passwordConfirmInput
@@ -168,7 +170,7 @@ function passwordConfirmValidation() {
 }
 passwordConfirmInput.addEventListener('input', passwordConfirmValidation);
 
-function toggleErrorMessageVisibility(isDataValid, errorMessage, input) {
+function toggleErrMessAndSubmitBtnVisibility(isDataValid, errorMessage, input) {
     if (!isDataValid) {
         errorMessage.classList.add('visible');
         input.classList.add('invalid');
@@ -219,6 +221,10 @@ form.addEventListener('submit', onSubmitForm);
 function onCancelForm() {
     errorMessage.classList.remove('visible');
     emailInput.classList.remove('invalid');
+    errorMessagePassword.classList.remove('visible');
+    passwordInput.classList.remove('invalid');
+    errorMessagePasswordConfirm.classList.remove('visible');
+    passwordConfirmInput.classList.remove('invalid');
     submitButton.removeAttribute('disabled');
     submitButton.classList.remove('btn-disabled');
 }
