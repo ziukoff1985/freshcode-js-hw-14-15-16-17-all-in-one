@@ -120,7 +120,6 @@ passwordInputs.forEach((input) => {
         errorMessagePasswordConfirm = errorMessage;
         errorMessage.textContent =
             'Please ensure both passwords are identical.';
-        // input.disabled = true;
     }
 });
 
@@ -128,7 +127,7 @@ let isPasswordValid = false;
 let isPasswordConfirmValid = false;
 
 function validatePassword() {
-    const passwordRegexp = /^[\w!@#$%^&]{8,}$/i;
+    const passwordRegexp = /^[\w!@#$%^&]{8,}$/;
     isPasswordValid = passwordRegexp.test(passwordInput.value);
 
     if (!isPasswordValid) {
@@ -137,13 +136,12 @@ function validatePassword() {
     } else {
         errorMessagePassword.classList.remove('visible');
         passwordInput.classList.remove('invalid');
-        // passwordConfirmInput.disabled = false;
     }
 
     // Call the function if user entered password, entered confirmation, and then changed entered password
-    if (isPasswordValid && passwordConfirmInput.value)
+    if (isPasswordValid && passwordConfirmInput.value) {
         validatePasswordConfirm();
-
+    }
     checkFormValidity();
 }
 passwordInput.addEventListener('input', validatePassword);
@@ -158,7 +156,10 @@ function validatePasswordConfirm() {
         errorMessagePasswordConfirm.classList.remove('visible');
         passwordConfirmInput.classList.remove('invalid');
     }
-    if (!passwordConfirmInput.value) isPasswordConfirmValid = false;
+    // Check if user first entered confirm password, deleted it, and started entering password (for submit button logic)
+    if (!passwordConfirmInput.value) {
+        isPasswordConfirmValid = false;
+    }
     checkFormValidity();
 }
 passwordConfirmInput.addEventListener('input', validatePasswordConfirm);
@@ -213,7 +214,6 @@ function onCancelForm() {
     passwordInput.classList.remove('invalid');
     errorMessagePasswordConfirm.classList.remove('visible');
     passwordConfirmInput.classList.remove('invalid');
-    // passwordConfirmInput.disabled = true;
     submitButton.disabled = true;
     submitButton.classList.add('btn-disabled');
     isPasswordValid = false;
