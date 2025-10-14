@@ -120,7 +120,7 @@ passwordInputs.forEach((input) => {
         errorMessagePasswordConfirm = errorMessage;
         errorMessage.textContent =
             'Please ensure both passwords are identical.';
-        input.disabled = true;
+        // input.disabled = true;
     }
 });
 
@@ -137,13 +137,13 @@ function validatePassword() {
     } else {
         errorMessagePassword.classList.remove('visible');
         passwordInput.classList.remove('invalid');
-        passwordConfirmInput.disabled = false;
+        // passwordConfirmInput.disabled = false;
     }
 
     // Call the function if user entered password, entered confirmation, and then changed entered password
-    if (isPasswordValid && passwordConfirmInput.value) {
+    if (isPasswordValid && passwordConfirmInput.value)
         validatePasswordConfirm();
-    }
+
     checkFormValidity();
 }
 passwordInput.addEventListener('input', validatePassword);
@@ -158,6 +158,7 @@ function validatePasswordConfirm() {
         errorMessagePasswordConfirm.classList.remove('visible');
         passwordConfirmInput.classList.remove('invalid');
     }
+    if (!passwordConfirmInput.value) isPasswordConfirmValid = false;
     checkFormValidity();
 }
 passwordConfirmInput.addEventListener('input', validatePasswordConfirm);
@@ -212,7 +213,7 @@ function onCancelForm() {
     passwordInput.classList.remove('invalid');
     errorMessagePasswordConfirm.classList.remove('visible');
     passwordConfirmInput.classList.remove('invalid');
-    passwordConfirmInput.disabled = true;
+    // passwordConfirmInput.disabled = true;
     submitButton.disabled = true;
     submitButton.classList.add('btn-disabled');
     isPasswordValid = false;
