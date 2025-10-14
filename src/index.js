@@ -88,6 +88,8 @@ form.append(btnWrapDiv);
 
 const submitButton = document.createElement('button');
 submitButton.setAttribute('type', 'submit');
+submitButton.setAttribute('disabled', true);
+submitButton.classList.add('btn-disabled');
 submitButton.textContent = 'Submit';
 btnWrapDiv.append(submitButton);
 
@@ -96,35 +98,70 @@ cancelButton.setAttribute('type', 'reset');
 cancelButton.textContent = 'Cancel';
 btnWrapDiv.append(cancelButton);
 
-// DOM - Email Validation
-const emailInput = document.querySelector('input[name="email"]');
+// Password Validation and Confirmation
+const passwordInputs = document.querySelectorAll('input[type="password"]');
+const [passwordInput, passwordConfirmInput] = passwordInputs;
 
-const emailInputGroup = emailInput.closest('.input-group');
+let errorMessagePassword;
+let errorMessagePasswordConfirm;
 
-const errorMessage = document.createElement('div');
-errorMessage.classList.add('error-message');
-errorMessage.textContent = 'INVALID EMAIL FORMAT';
-emailInputGroup.append(errorMessage);
-
-function validateEmail() {
-    const email = emailInput.value;
-    const regexp = /^\w+[\.-]?\w+@[a-z]{3,8}\.[a-z]{2,5}$/i;
-    const isEmailValid = regexp.test(email);
-
-    if (!isEmailValid) {
-        errorMessage.classList.add('visible');
-        emailInput.classList.add('invalid');
-        submitButton.setAttribute('disabled', true);
-        submitButton.classList.add('btn-disabled');
+passwordInputs.forEach((input) => {
+    input.addEventListener('focus', () => (input.type = 'text'));
+    input.addEventListener('blur', () => (input.type = 'password'));
+    const inputGroup = input.closest('.input-group');
+    const errorMessage = document.createElement('div');
+    errorMessage.classList.add('error-message');
+    inputGroup.append(errorMessage);
+    if (input.name === 'password') {
+        errorMessagePassword = errorMessage;
+        errorMessage.textContent =
+            'Min 8 characters needed. Allow: a-z, A-Z, 0-9, _, !, @, #, $, %, ^, &';
     } else {
-        errorMessage.classList.remove('visible');
-        emailInput.classList.remove('invalid');
-        submitButton.removeAttribute('disabled');
-        submitButton.classList.remove('btn-disabled');
+        errorMessagePasswordConfirm = errorMessage;
+        errorMessage.textContent =
+            'Please ensure both passwords are identical.';
+        // input.disabled = true;
     }
-}
+});
 
-emailInput.addEventListener('input', validateEmail);
+let isPasswordValid = false;
+let isPasswordConfirmValid = false;
+
+function validatePassword() {
+    const passwordRegexp = /^[\w!@#$%^&]{8,}$/i;
+    isPasswordValid = passwordRegexp.test(passwordInput.value);
+
+    if (!isPasswordValid) {
+        errorMessagePassword.classList.add('visible');
+        passwordInput.classList.add('invalid');
+    } else {
+        errorMessagePassword.classList.remove('visible');
+        passwordInput.classList.remove('invalid');
+        // passwordConfirmInput.disabled = false;
+    }
+
+    // Call the function if user entered password, entered confirmation, and then changed entered password
+    if (isPasswordValid && passwordConfirmInput.value)
+        validatePasswordConfirm();
+
+    checkFormValidity();
+}
+passwordInput.addEventListener('input', validatePassword);
+
+function validatePasswordConfirm() {
+    isPasswordConfirmValid = passwordInput.value === passwordConfirmInput.value;
+
+    if (!isPasswordConfirmValid) {
+        errorMessagePasswordConfirm.classList.add('visible');
+        passwordConfirmInput.classList.add('invalid');
+    } else {
+        errorMessagePasswordConfirm.classList.remove('visible');
+        passwordConfirmInput.classList.remove('invalid');
+    }
+    if (!passwordConfirmInput.value) isPasswordConfirmValid = false;
+    checkFormValidity();
+}
+passwordConfirmInput.addEventListener('input', validatePasswordConfirm);
 
 // DOM - Collecting Props and Form Submit
 class Person {
@@ -160,11 +197,27 @@ function onSubmitForm(event) {
 
 form.addEventListener('submit', onSubmitForm);
 
+// Check if password and password confirmation are valid - enable submit button
+function checkFormValidity() {
+    if (isPasswordValid && isPasswordConfirmValid) {
+        submitButton.disabled = false;
+        submitButton.classList.remove('btn-disabled');
+    } else {
+        submitButton.disabled = true;
+        submitButton.classList.add('btn-disabled');
+    }
+}
+
 function onCancelForm() {
-    errorMessage.classList.remove('visible');
-    emailInput.classList.remove('invalid');
-    submitButton.removeAttribute('disabled');
-    submitButton.classList.remove('btn-disabled');
+    errorMessagePassword.classList.remove('visible');
+    passwordInput.classList.remove('invalid');
+    errorMessagePasswordConfirm.classList.remove('visible');
+    passwordConfirmInput.classList.remove('invalid');
+    // passwordConfirmInput.disabled = true;
+    submitButton.disabled = true;
+    submitButton.classList.add('btn-disabled');
+    isPasswordValid = false;
+    isPasswordConfirmValid = false;
 }
 
 cancelButton.addEventListener('click', onCancelForm);
