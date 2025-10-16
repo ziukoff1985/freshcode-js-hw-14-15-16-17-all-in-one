@@ -3,7 +3,7 @@ import { inputConfigData, radioConfigData } from './configData.js';
 // DOM - elements creation
 const container = document.createElement('div');
 container.classList.add('container');
-document.body.prepend(container);
+document.body.append(container);
 
 const form = document.createElement('form');
 container.append(form);
@@ -98,10 +98,42 @@ cancelButton.setAttribute('type', 'reset');
 cancelButton.textContent = 'Cancel';
 btnWrapDiv.append(cancelButton);
 
+// DOM - Email Validation
+
+// Global variable (used for Submit button state)
+let isEmailValid = false;
+
+const emailInput = document.querySelector('input[name="email"]');
+
+const inputGroup = emailInput.closest('.input-group');
+
+const errorMessage = document.createElement('div');
+errorMessage.classList.add('error-message');
+errorMessage.textContent = 'INVALID EMAIL FORMAT';
+inputGroup.append(errorMessage);
+
+// Email validation function
+function validateEmail() {
+    const email = emailInput.value;
+    const regexp = /^\w+[\.-]?\w+@[a-z]{3,8}\.[a-z]{2,5}$/i;
+    isEmailValid = regexp.test(email);
+
+    if (!isEmailValid) {
+        errorMessage.classList.add('visible');
+        emailInput.classList.add('invalid');
+    } else {
+        errorMessage.classList.remove('visible');
+        emailInput.classList.remove('invalid');
+    }
+}
+
+emailInput.addEventListener('input', validateEmail);
+
 // Password Validation and Confirmation
 const passwordInputs = document.querySelectorAll('input[type="password"]');
 const [passwordInput, passwordConfirmInput] = passwordInputs;
 
+// DOM - Creating error messages for password and password confirmation
 let errorMessagePassword;
 let errorMessagePasswordConfirm;
 
@@ -123,9 +155,11 @@ passwordInputs.forEach((input) => {
     }
 });
 
+// Global variables (used for Submit button state)
 let isPasswordValid = false;
 let isPasswordConfirmValid = false;
 
+// Password validation function
 function validatePassword() {
     const passwordRegexp = /^[\w!@#$%^&]{8,}$/;
     isPasswordValid = passwordRegexp.test(passwordInput.value);
@@ -146,6 +180,7 @@ function validatePassword() {
 }
 passwordInput.addEventListener('input', validatePassword);
 
+// Password confirmation validation function
 function validatePasswordConfirm() {
     isPasswordConfirmValid = passwordInput.value === passwordConfirmInput.value;
 
@@ -165,6 +200,8 @@ function validatePasswordConfirm() {
 passwordConfirmInput.addEventListener('input', validatePasswordConfirm);
 
 // DOM - Collecting Props and Form Submit
+
+// Class for creating a new person
 class Person {
     constructor(...args) {
         args.forEach(({ name, value }) => {
@@ -173,6 +210,7 @@ class Person {
     }
 }
 
+// Function for form submit
 function onSubmitForm(event) {
     event.preventDefault();
 
@@ -200,7 +238,7 @@ form.addEventListener('submit', onSubmitForm);
 
 // Check if password and password confirmation are valid - enable submit button
 function checkFormValidity() {
-    if (isPasswordValid && isPasswordConfirmValid) {
+    if (isPasswordValid && isPasswordConfirmValid && isEmailValid) {
         submitButton.disabled = false;
         submitButton.classList.remove('btn-disabled');
     } else {
@@ -209,6 +247,7 @@ function checkFormValidity() {
     }
 }
 
+// Function for cancel button
 function onCancelForm() {
     errorMessagePassword.classList.remove('visible');
     passwordInput.classList.remove('invalid');
